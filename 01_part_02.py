@@ -6,26 +6,21 @@ def nice_lines(filename):
 		return [line.strip() for line in f.readlines() if line.strip() != ""]
 
 def first_value(s, words):
-
 	lowest_index = None
 	ret = None
-
 	for n, c in enumerate(s):
 		if c.isdigit():
 			lowest_index = n
 			ret = int(c)
 			break
-
 	for word in words:
 		if word in s:
 			i = s.index(word)
 			if lowest_index == None or i < lowest_index:
 				lowest_index = i
 				ret = words.index(word)
-
 	if ret == None:
 		raise(ValueError)
-
 	return ret
 
 def main():
