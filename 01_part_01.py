@@ -10,7 +10,7 @@ def first_value(s):
 
 def main():
 	count = 0
-	for line in nice_lines("input"):
+	for line in nice_lines("01_input.txt"):
 		first = first_value(line)
 		last = first_value(line[::-1])
 		count += int("{}{}".format(first, last))
