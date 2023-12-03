@@ -15,11 +15,9 @@ def nice_lines(filename):
 		return [line.strip() for line in f.readlines() if line.strip() != ""]
 
 def add_border(lines):					# adds a border of dots all around to prevent edge cases...
-	adjusted_lines = []
-	for line in lines:
-		adjusted_lines.append(".{}.".format(line))
+	adjusted_lines = [".{}.".format(line) for line in lines]
 	empty_line = "." * len(adjusted_lines[0])
-	return [empty_line] + adjusted_lines + [empty_line]
+	return [empty_line, *adjusted_lines, empty_line]
 
 def make_nums(lines):
 	all_nums = []
