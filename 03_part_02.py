@@ -9,11 +9,11 @@ class Number:
 		y1 = self.y - 1
 		y2 = self.y + 2
 		return x1, y1, x2, y2
-	def adjust_stars(self, lines, star_dict):
+	def adjust_stars(self, star_dict):
 		x1, y1, x2, y2 = self.search_range()
 		for y in range(y1, y2):
 			for x in range(x1, x2):
-				if lines[y][x] == "*":	# Note [y][x] order
+				if (x, y) in star_dict:
 					star_dict[(x, y)].nums.append(self.val)
 
 class Star:
@@ -31,11 +31,9 @@ def nice_lines(filename):
 		return [line.strip() for line in f.readlines() if line.strip() != ""]
 
 def add_border(lines):					# adds a border of dots all around to prevent edge cases...
-	adjusted_lines = []
-	for line in lines:
-		adjusted_lines.append(".{}.".format(line))
+	adjusted_lines = [".{}.".format(line) for line in lines]
 	empty_line = "." * len(adjusted_lines[0])
-	return [empty_line] + adjusted_lines + [empty_line]
+	return [empty_line, *adjusted_lines, empty_line]
 
 def make_nums(lines):
 	all_nums = []
@@ -64,7 +62,7 @@ def main():
 	all_nums = make_nums(lines)
 	star_dict = make_stars(lines)
 	for num in all_nums:
-		num.adjust_stars(lines, star_dict)
+		num.adjust_stars(star_dict)
 	print(sum(star.value() for star in star_dict.values()))
 
 main()
