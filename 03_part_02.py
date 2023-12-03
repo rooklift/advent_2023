@@ -65,9 +65,6 @@ def main():
 	star_dict = make_stars(lines)
 	for num in all_nums:
 		num.adjust_stars(lines, star_dict)
-	count = 0
-	for star in star_dict.values():
-		count += star.value()
-	print(count)
+	print(sum(star.value() for star in star_dict.values()))
 
 main()
