@@ -3,13 +3,13 @@ def nice_lines(filename):
 		return [line.strip() for line in f.readlines() if line.strip() != ""]
 
 def main():
+
 	lines = nice_lines("04_input.txt")
 
-	# Note: we'll ignore the id numbers given to us and label the cards from 0 instead.
-
-	counts = [1 for line in lines]
+	counts = [1 for line in lines]			# Note: we'll ignore the id numbers given to us and label the cards from 0 instead.
 
 	for i, line in enumerate(lines):
+
 		tokens1 = line.split(":")[1].split("|")[0].split()
 		tokens2 = line.split(":")[1].split("|")[1].split()
 		set1 = set(tokens1)
