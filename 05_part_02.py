@@ -71,9 +71,7 @@ class Map:
 				return r[-1]
 		raise AssertionError							# This should be impossible
 
-	def new_ranges(self, old_range):
-
-		# Given a single input range, return all output ranges.
+	def new_ranges(self, old_range):					# Given a single input range, return all output ranges.
 
 		ret = []
 		n = old_range[0]
@@ -119,24 +117,12 @@ class Map:
 
 def main():
 	ranges, maps = parse("05_input.txt")
-
-	# Strategy: iterate over the ranges
-	# Each iteration produces a new list of ranges
-	# Repeat
-
 	for m in maps:
 		new_ranges = []
 		for r in ranges:
 			new_ranges += m.new_ranges(r)
 		ranges = new_ranges
-
-	result = None
-
-	for r in ranges:
-		if result == None or r[0] < result:
-			result = r[0]
-
-	print(result)
+	print(min([r[0] for r in ranges]))
 
 
 main()
