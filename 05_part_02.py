@@ -18,7 +18,6 @@ def make_seed_ranges(ints):
 		ranges.append(range(item[0], item[0] + item[1]))
 	return ranges
 
-# Boring parsing stuff above.
 # ------------------------------------------------------------------------------------------------------------------
 
 class Map:
