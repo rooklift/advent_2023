@@ -24,8 +24,8 @@ def make_seed_ranges(ints):
 class Map:
 
 	def __init__(self, name, ints):
-		self.source = name.split("-")[0]				# We actually don't need this info, we can use the order
-		self.dest = name.split("-")[-1].split()[0]		# in the list of maps, since the input file is in order
+		self.input = name.split("-")[0]					# We actually don't need this info, we can use the order
+		self.output = name.split("-")[-1].split()[0]	# in the list of maps, since the input file is in order
 		self.ranges = []
 		self.adjustments = []
 
@@ -113,7 +113,7 @@ class Map:
 		return ret
 
 	def __repr__(self):
-		return "{} to {} ({} ranges)".format(self.source, self.dest, len(self.ranges))
+		return "{} to {} ({} ranges)".format(self.input, self.output, len(self.ranges))
 
 # ------------------------------------------------------------------------------------------------------------------
 

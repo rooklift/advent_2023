@@ -33,8 +33,8 @@ def parse(filename):
 class Map:
 
 	def __init__(self, name, ints):
-		self.source = name.split("-")[0]				# We actually don't need this info, we can use the order
-		self.dest = name.split("-")[-1].split()[0]		# in the list of maps, since the input file is in order
+		self.input = name.split("-")[0]					# We actually don't need this info, we can use the order
+		self.output = name.split("-")[-1].split()[0]	# in the list of maps, since the input file is in order
 		self.ranges = []
 		self.adjustments = []
 
@@ -55,7 +55,7 @@ class Map:
 		return val
 
 	def __repr__(self):
-		return "{} to {} map".format(self.source, self.dest)
+		return "{} to {} map".format(self.input, self.output)
 
 def main():
 	seeds, maps = parse("05_input.txt")
