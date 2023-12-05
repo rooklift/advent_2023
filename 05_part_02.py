@@ -1,31 +1,14 @@
 def parse(filename):
-
 	with open(filename) as f:
-		lines = f.read().split("\n")
-		lines.append("")				# Add empty line at end to ensure parse works.
-
-	seeds = []		# What we are
-	maps = []		# returning
-
-	name = ""		# Our variables
-	ints = []		# while parsing
-
-	for line in lines:
-		if line.strip() == "":			# Empty line signifies end of section.
-			if name == "seeds":
-				seeds = make_seed_ranges(ints)
-			elif name != "":
-				maps.append(Map(name, ints))
-			name = ""
-			ints = []
-			continue
-		if ":" in line:
-			name = line.split(":")[0]
-			tokens = line.split(":")[1].split()
-		else:
-			tokens = line.split()
-		ints += [int(token) for token in tokens]
-
+		data = f.read()
+	parts = [part for part in data.split("\n\n") if part.strip() != ""]
+	seeds = make_seed_ranges([int(token) for token in parts[0].split(":")[1].split()])
+	maps = []
+	for part in parts[1:]:
+		name = part.split(":")[0]
+		tokens = part.split(":")[1].split()
+		ints = [int(token) for token in tokens]
+		maps.append(Map(name, ints))
 	return seeds, maps
 
 def make_seed_ranges(ints):
