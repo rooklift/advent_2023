@@ -12,9 +12,8 @@ def parse(filename):
 
 def make_seed_ranges(ints):
 	ranges = []
-	doubles = zip(ints[0::2], ints[1::2])
-	for item in doubles:
-		ranges.append(range(item[0], item[0] + item[1]))
+	for start, length in zip(ints[0::2], ints[1::2]):
+		ranges.append(range(start, start + length))
 	return ranges
 
 class Map:
@@ -52,7 +51,7 @@ class Map:
 				return r[-1]
 		raise AssertionError							# This should be impossible
 
-	def new_ranges(self, old_range):					# Given a single input range, return all output ranges.
+	def new_ranges(self, old_range):					# Given a single input range, return all output ranges
 		ret = []
 		n = old_range[0]
 		while True:
