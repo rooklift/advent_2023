@@ -9,14 +9,8 @@ PAIR = 2
 NOTHING = 1
 
 card_comparison_dict = {
-	"A": 14,
-	"K": 13,
-	"Q": 12,
-	"J": 1,					# special joker rule for part 2
-	"T": 10
-}
-for n in range(2, 10):
-	card_comparison_dict[str(n)] = n
+	"A": 14, "K": 13, "Q": 12, "T": 10, "9": 9, "8": 8,				# Note: no Jack in part 2
+	"7": 7, "6": 6, "5": 5, "4": 4, "3": 3, "2": 2,	"J": 1}			# Note: special Joker rule in part 2
 
 def parse(filename):
 	with open(filename) as f:
