@@ -1,3 +1,5 @@
+import math
+
 def parse(filename):
 	with open(filename) as f:
 		lines = [line.strip() for line in f.read().split("\n") if line.strip() != ""]
@@ -35,6 +37,6 @@ def main():
 				loop_lengths.append(i)
 				break
 
-	print(loop_lengths)		# Then send this to an online calculator (how do you LCM??)
+	print(math.lcm(*loop_lengths))
 
 main()
