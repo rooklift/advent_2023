@@ -3,10 +3,8 @@ def parse(filename):
 		lines = [line.strip() for line in f.read().split("\n") if line.strip() != ""]
 	directions = lines[0]
 	m = dict()
-	startloc = None
 	for line in lines[1:]:
-		line = line.replace("(", "")
-		line = line.replace(")", "")
+		line = line.replace("(", "").replace(")", "")
 		key, rest = [item.strip() for item in line.split("=")]
 		value = tuple(item.strip() for item in rest.split(","))
 		m[key] = value
