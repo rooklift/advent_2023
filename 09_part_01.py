@@ -1,6 +1,7 @@
 def parse(filename):
 	with open(filename) as f:
-		return [line.strip() for line in f.read().split("\n") if line.strip() != ""]
+		rawlines = [line.strip() for line in f.read().split("\n") if line.strip() != ""]
+		return [[int(token) for token in line.split()] for line in rawlines]
 
 def all_zeros(arr):
 	for item in arr:
@@ -30,7 +31,7 @@ def main():
 	lines = parse("09_input.txt")
 	result = 0
 	for line in lines:
-		result += extrapolate([int(token) for token in line.split()])
+		result += extrapolate(line)
 	print(result)
 
 main()
