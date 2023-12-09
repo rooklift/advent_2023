@@ -3,12 +3,6 @@ def parse(filename):
 		rawlines = [line.strip() for line in f.read().split("\n") if line.strip() != ""]
 		return [[int(token) for token in line.split()] for line in rawlines]
 
-def all_zeros(arr):
-	for item in arr:
-		if item != 0:
-			return False
-	return True
-
 def next_subline(line):
 	ret = []
 	for n in range(1, len(line)):
@@ -18,7 +12,7 @@ def next_subline(line):
 def extrapolate(line):
 	sublines = [line[::]]
 	while True:
-		if all_zeros(sublines[-1]):
+		if all(n == 0 for n in sublines[-1]):
 			break
 		sublines.append(next_subline(sublines[-1]))
 	while True:
