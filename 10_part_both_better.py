@@ -73,7 +73,7 @@ class Map:
 					self.grid[x][y] = "."
 		return len(visited)
 
-	def count_inside(self):					# Each time we move from tube to not tube, we move from being inside to outside or vice versa
+	def count_inside(self):					# Each time we cross a tube, we go from inside to outside or vice versa
 		total = 0
 		for y in range(self.height):
 			inside = False
