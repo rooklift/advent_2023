@@ -104,7 +104,7 @@ def main():
 
 	m = parse("10_input.txt")
 
-	m.add_border()				# Avoid literal edge cases
+	m.add_border()							# Avoid literal edge cases
 	tubes = m.loop()
 	inside = m.count_inside()
 
