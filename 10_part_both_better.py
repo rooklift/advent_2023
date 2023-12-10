@@ -16,10 +16,13 @@ class Map:
 	def __init__(self, lines):
 		self.width = len(lines[0])
 		self.height = len(lines)
+		self._tube = None
 		self.grid = [[] for c in lines[0]]
 		for line in lines:
 			for x, c in enumerate(line):
 				self.grid[x].append(c)
+		self.add_border()					# Avoid literal edge cases
+		self.clear_debris()
 
 	def get_s_loc(self):
 		for x in range(self.width):
@@ -51,7 +54,9 @@ class Map:
 	def can_go_down(self, x, y):
 		return self.grid[x][y] in DOWN and self.grid[x][y + 1] in UP
 
-	def loop(self):							# Return amount of tubing. Also sets all non-tube spots to "."
+	def tube(self):							# Return amount of tubing. Also sets all non-tube spots to "."
+		if self._tube:
+			return self._tube
 		x, y = self.get_s_loc()
 		visited = set()
 		visited.add((x, y))
@@ -67,11 +72,15 @@ class Map:
 			else:							# Can't move because reached start
 				break
 			visited.add((x, y))
+		self._tube = visited
+		return self._tube
+
+	def clear_debris(self):					# Set everything that isn't in the tube to "."
+		tube = self.tube()
 		for x in range(self.width):
 			for y in range(self.height):
-				if (x, y) not in visited:
+				if (x, y) not in tube:
 					self.grid[x][y] = "."
-		return len(visited)
 
 	def count_inside(self):					# Each time we cross a tube, we go from inside to outside or vice versa
 		total = 0
@@ -101,11 +110,8 @@ class Map:
 
 def main():
 	m = parse("10_input.txt")
-	m.add_border()							# Avoid literal edge cases
-	tubes = m.loop()
-	inside = m.count_inside()
-	print("Maximum distance: ", tubes // 2)
-	print("    Space inside: ", inside)
+	print("Maximum distance: ", len(m.tube()) // 2)
+	print("    Space inside: ", m.count_inside())
 
 
 main()
