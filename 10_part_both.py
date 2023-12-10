@@ -5,6 +5,11 @@
 #	If a dot is seen on the LEFT (from the POV of the traversal) flag it (convert it to "?")
 # Flood fill the flags through the dots
 # The flagged dots are either all of the inside dots, or all of the outside dots
+#
+# -------------------------------------------------------------------------------------------------
+
+# Which pipe types can connect in which directions? Note S is special and could go any direction.
+# Whether the pipe actually connects depends on whether the pipe it is trying to connect to can connect to it.
 
 up = ["L", "|", "J", "S"]
 down = ["F", "|", "7", "S"]
