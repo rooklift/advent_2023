@@ -11,10 +11,10 @@
 # Which pipe types can connect in which directions? Note S is special and could go any direction.
 # Whether the pipe actually connects depends on whether the pipe it is trying to connect to can connect to it.
 
-up = ["L", "|", "J", "S"]
-down = ["F", "|", "7", "S"]
-left = ["7", "-", "J", "S"]
-right = ["F", "-", "L", "S"]
+UP = ["L", "|", "J", "S"]
+DOWN = ["F", "|", "7", "S"]
+LEFT = ["7", "-", "J", "S"]
+RIGHT = ["F", "-", "L", "S"]
 
 def parse(filename):
 	with open(filename) as f:
@@ -58,32 +58,16 @@ class Map:
 		self.height -= 2
 
 	def can_go_left(self, x, y):
-		if x <= 0:
-			return False
-		if self.grid[x][y] in left and self.grid[x - 1][y] in right:
-			return True
-		return False
+		return self.grid[x][y] in LEFT and self.grid[x - 1][y] in RIGHT
 
 	def can_go_right(self, x, y):
-		if x >= self.width - 1:
-			return False
-		if  self.grid[x][y] in right and self.grid[x + 1][y] in left:
-			return True
-		return False
+		return self.grid[x][y] in RIGHT and self.grid[x + 1][y] in LEFT
 
 	def can_go_up(self, x, y):
-		if y <= 0:
-			return False
-		if  self.grid[x][y] in up and self.grid[x][y - 1] in down:
-			return True
-		return False
+		return self.grid[x][y] in UP and self.grid[x][y - 1] in DOWN
 
 	def can_go_down(self, x, y):
-		if y >= self.height - 1:
-			return False
-		if  self.grid[x][y] in down and self.grid[x][y + 1] in up:
-			return True
-		return False
+		return self.grid[x][y] in DOWN and self.grid[x][y + 1] in UP
 
 	def loop(self, r):				# In round 1, non-loop parts of the grid get made into "."
 									# In round 2, dots on the LEFT are converted to " "
