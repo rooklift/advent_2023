@@ -104,8 +104,8 @@ def main():
 	m.add_border()							# Avoid literal edge cases
 	tubes = m.loop()
 	inside = m.count_inside()
-	print("    Tubes / 2:", tubes // 2)
-	print("Spaces inside:", inside)
+	print("Maximum distance: ", tubes // 2)
+	print("    Space inside: ", inside)
 
 
 main()
