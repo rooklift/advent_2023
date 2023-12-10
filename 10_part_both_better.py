@@ -97,17 +97,13 @@ class Map:
 				elif c == "J":
 					if entry == "F":
 						inside = not inside
-
 		return total
 
 def main():
-
 	m = parse("10_input.txt")
-
 	m.add_border()							# Avoid literal edge cases
 	tubes = m.loop()
 	inside = m.count_inside()
-
 	print("    Tubes / 2:", tubes // 2)
 	print("Spaces inside:", inside)
 
