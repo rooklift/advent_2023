@@ -176,11 +176,11 @@ def main():
 
 	m = parse("10_input.txt")
 
-	m.add_border()
+	m.add_border()				# Avoid literal edge cases
 	tubes = m.loop(1)
 	m.loop(2)
 	m.flood()
-	m.shrink()
+	m.shrink()					# Undo the expansion (add_border) above
 
 	left_count = m.string().count("?")
 	right_count = m.string().count(".")
