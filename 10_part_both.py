@@ -2,9 +2,9 @@
 # Traverse the loop
 # Clear all non-loop spots to be dots, i.e. "."
 # Now traverse the loop again:
-#	If a dot is seen on the LEFT (from the POV of the traversal) flag it (convert it to "?")
+#	If a dot is seen on the LEFT (from the POV of the traversal) flag it (convert it to " ")
 # Flood fill the flags through the dots
-# The flagged dots are either all of the inside dots, or all of the outside dots
+# The flags are either all of the outside locations, or all of the inside locations
 #
 # -------------------------------------------------------------------------------------------------
 
@@ -86,7 +86,7 @@ class Map:
 		return False
 
 	def loop(self, r):				# In round 1, non-loop parts of the grid get made into "."
-									# In round 2, dots on the left are converted to "?"
+									# In round 2, dots on the LEFT are converted to " "
 		x, y = self.get_s_loc()
 		visited = set()
 		visited.add((x, y))
@@ -94,30 +94,30 @@ class Map:
 			if self.can_go_left(x, y) and (x - 1, y) not in visited:
 				if r == 2:
 					if self.grid[x][y + 1] == ".":
-						self.grid[x][y + 1] = "?"
+						self.grid[x][y + 1] = " "
 					if self.grid[x - 1][y + 1] == ".":
-						self.grid[x - 1][y + 1] = "?"
+						self.grid[x - 1][y + 1] = " "
 				x -= 1
 			elif self.can_go_right(x, y) and (x + 1, y) not in visited:
 				if r == 2:
 					if self.grid[x][y - 1] == ".":
-						self.grid[x][y - 1] = "?"
+						self.grid[x][y - 1] = " "
 					if self.grid[x + 1][y - 1] == ".":
-						self.grid[x + 1][y - 1] = "?"
+						self.grid[x + 1][y - 1] = " "
 				x += 1
 			elif self.can_go_up(x, y) and (x, y - 1) not in visited:
 				if r == 2:
 					if self.grid[x - 1][y] == ".":
-						self.grid[x - 1][y] = "?"
+						self.grid[x - 1][y] = " "
 					if self.grid[x - 1][y - 1] == ".":
-						self.grid[x - 1][y - 1] = "?"
+						self.grid[x - 1][y - 1] = " "
 				y -= 1
 			elif self.can_go_down(x, y) and (x, y + 1) not in visited:
 				if r == 2:
 					if self.grid[x + 1][y] == ".":
-						self.grid[x + 1][y] = "?"
+						self.grid[x + 1][y] = " "
 					if self.grid[x + 1][y + 1] == ".":
-						self.grid[x + 1][y + 1] = "?"
+						self.grid[x + 1][y + 1] = " "
 				y += 1
 			else:											# Can't move because reached start
 				break
@@ -132,11 +132,11 @@ class Map:
 	def neighbours(self, x, y):
 		return [(x - 1, y), (x + 1, y), (x, y - 1), (x, y + 1)]
 
-	def flood(self):		# Every dot that touches a "?" needs to become "?"
+	def flood(self):		# Every dot that touches a " " needs to become " "
 		todo = set()
 		for x in range(self.width):
 			for y in range(self.height):
-				if self.grid[x][y] == "?":
+				if self.grid[x][y] == " ":
 					todo.add((x, y))
 		while True:
 			new_todo = set()
@@ -144,7 +144,7 @@ class Map:
 				neighbours = self.neighbours(x, y)
 				for (nx, ny) in neighbours:
 					if self.grid[nx][ny] == ".":
-						self.grid[nx][ny] = "?"
+						self.grid[nx][ny] = " "
 						new_todo.add((nx, ny))
 			if len(new_todo) == 0:
 				return
@@ -169,7 +169,7 @@ def main():
 	m.flood()
 	m.shrink()					# Undo the expansion (add_border) above
 
-	left_count = m.string().count("?")
+	left_count = m.string().count(" ")
 	right_count = m.string().count(".")
 
 	print(m.string())
