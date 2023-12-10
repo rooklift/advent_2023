@@ -187,6 +187,7 @@ def main():
 
 	print(m.string())
 	print("     Tubes:", tubes)
+	print("       / 2:", tubes // 2, "(this answers part 1)")
 	print(" Left side:", left_count)
 	print("Right side:", right_count)
 	print("     Total:", tubes + left_count + right_count)
