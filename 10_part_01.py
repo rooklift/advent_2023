@@ -56,7 +56,7 @@ class Map:
 			return True
 		return False
 
-	def loop_length(self):
+	def loop_length(self, clear_others = False):	# If clear_others is given, non-loop parts of the grid get made into "."
 		x, y = self.get_s_loc()
 		visited = set()
 		visited.add((x, y))
@@ -70,11 +70,29 @@ class Map:
 			elif self.can_go_down(x, y) and (x, y + 1) not in visited:
 				y += 1
 			else:									# Can't move because reached start
-				return len(visited)
+				break
 			visited.add((x, y))
+		if clear_others:
+			for x in range(self.width):
+				for y in range(self.height):
+					if (x, y) not in visited:
+						self.grid[x][y] = "."
+		return len(visited)
+
+	def string(self):
+		lines = []
+		for y in range(self.height):
+			line = []
+			for x in range(self.width):
+				line.append(self.grid[x][y])
+			lines.append("".join(line))
+		return "\n".join(lines)
 
 def main():
 	m = parse("10_input.txt")
-	print(m.loop_length() // 2)
+	result = m.loop_length(True) // 2
+	print(m.string())
+	print(result)
+
 
 main()
