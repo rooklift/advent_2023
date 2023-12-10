@@ -54,7 +54,7 @@ class Map:
 	def can_go_down(self, x, y):
 		return self.grid[x][y] in DOWN and self.grid[x][y + 1] in UP
 
-	def tube(self):							# Return amount of tubing. Also sets all non-tube spots to "."
+	def tube(self):							# Return set of tubing.
 		if self._tube:
 			return self._tube
 		x, y = self.get_s_loc()
