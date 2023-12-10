@@ -87,16 +87,16 @@ class Map:
 					inside = not inside
 				elif c == "-":
 					pass					# "-" i.e. horizontal pipe neither adds to the total nor changes our inside/outside status
+				elif c == "F":
+					entry = "F"
+				elif c == "L":
+					entry = "L"
 				elif c == "7":
 					if entry == "L":
 						inside = not inside
 				elif c == "J":
 					if entry == "F":
 						inside = not inside
-				elif c == "F":
-					entry = "F"
-				elif c == "L":
-					entry = "L"
 
 		return total
 
