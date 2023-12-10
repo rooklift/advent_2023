@@ -44,9 +44,6 @@ class Map:
 			self.grid[x].append(".")
 		self.height += 2
 
-		assert self.width == len(self.grid)
-		assert self.height == len(self.grid[0]) == len(self.grid[1]) == len(self.grid[-1])
-
 	def shrink(self):
 		# Decrease width...
 		self.grid = self.grid[1:-1]
@@ -54,9 +51,6 @@ class Map:
 		# Decrease height...
 		self.grid = [col[1:-1] for col in self.grid]
 		self.height -= 2
-
-		assert self.width == len(self.grid)
-		assert self.height == len(self.grid[0]) == len(self.grid[1]) == len(self.grid[-1])
 
 	def can_go_left(self, x, y):
 		if x <= 0:
@@ -131,26 +125,14 @@ class Map:
 		return len(visited)
 
 	def neighbours(self, x, y):
-		ret = []
-		if x > 0:
-			ret.append((x - 1, y))
-		if x < self.width - 1:
-			ret.append((x + 1, y))
-		if y > 0:
-			ret.append((x, y - 1))
-		if y < self.height - 1:
-			ret.append((x, y + 1))
-		return ret
+		return [(x - 1, y), (x + 1, y), (x, y - 1), (x, y + 1)]
 
 	def flood(self):		# Every dot that touches a "?" needs to become "?"
-
 		todo = set()
-
 		for x in range(self.width):
 			for y in range(self.height):
 				if self.grid[x][y] == "?":
 					todo.add((x, y))
-
 		while True:
 			new_todo = set()
 			for (x, y) in todo:
@@ -187,7 +169,7 @@ def main():
 
 	print(m.string())
 	print("     Tubes:", tubes)
-	print("       / 2:", tubes // 2, "(this answers part 1)")
+	print("       / 2:", tubes // 2, "  (this answers part 1)")
 	print(" Left side:", left_count)
 	print("Right side:", right_count)
 	print("     Total:", tubes + left_count + right_count)
