@@ -63,14 +63,11 @@ class Item:
 
 def main():
 	items = parse("12_input.txt")
-
 	total = 0
-
 	for i, item in enumerate(items):
 		combos = item.valid_combos()
 		total += combos
 		print(i, combos)
-
 	print(total)
 
 main()
