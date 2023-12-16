@@ -95,12 +95,13 @@ def work(m, x, y, direction):
 def main():
 	m = parse("16_input.txt")
 	results = []
-	for x in range(m.width):
-		results.append(work(m, x, 0, S))
-		results.append(work(m, x, m.height - 1, N))
 	for y in range(m.height):
 		results.append(work(m, 0, y, E))
 		results.append(work(m, m.width - 1, y, W))
-	print(max(results))
+	for x in range(m.width):
+		results.append(work(m, x, 0, S))
+		results.append(work(m, x, m.height - 1, N))
+	print(results[0])		# Part 1
+	print(max(results))		# Part 2
 
 main()
