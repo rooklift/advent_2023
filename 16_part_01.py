@@ -1,8 +1,3 @@
-def parse(filename):
-	with open(filename) as f:
-		lines = [line.strip() for line in f.read().split("\n") if line.strip() != ""]
-		return Map(lines)
-
 N = 1
 E = 2
 S = 3
@@ -83,6 +78,11 @@ class Map:
 					ret += 1
 		return ret
 
+
+def parse(filename):
+	with open(filename) as f:
+		lines = [line.strip() for line in f.read().split("\n") if line.strip() != ""]
+		return Map(lines)
 
 def main():
 	m = parse("16_input.txt")

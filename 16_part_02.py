@@ -1,8 +1,3 @@
-def parse(filename):
-	with open(filename) as f:
-		lines = [line.strip() for line in f.read().split("\n") if line.strip() != ""]
-		return Map(lines)
-
 N = 1
 E = 2
 S = 3
@@ -82,6 +77,21 @@ class Map:
 					ret += 1
 		return ret
 
+
+def parse(filename):
+	with open(filename) as f:
+		lines = [line.strip() for line in f.read().split("\n") if line.strip() != ""]
+		return Map(lines)
+
+def work(m, x, y, direction):
+	m.reset()
+	todo = set()
+	todo.add((x, y, direction))
+	while len(todo) > 0:
+		x, y, direction = todo.pop()
+		m.propagate(x, y, direction, todo)
+	return m.count_energy()
+
 def main():
 	m = parse("16_input.txt")
 	results = []
@@ -92,14 +102,5 @@ def main():
 		results.append(work(m, 0, y, E))
 		results.append(work(m, m.width - 1, y, W))
 	print(max(results))
-
-def work(m, x, y, direction):
-	m.reset()
-	todo = set()
-	todo.add((x, y, direction))
-	while len(todo) > 0:
-		x, y, direction = todo.pop()
-		m.propagate(x, y, direction, todo)
-	return m.count_energy()
 
 main()
