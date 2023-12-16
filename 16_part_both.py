@@ -39,11 +39,12 @@ class Map:
 		self.height = len(lines)
 		self.light = set()
 
-	def propagate(self, x, y, direction, todo):
+	def propagate(self, x, y, direction):
+		todo = set()
 		if x < 0 or x >= self.width or y < 0 or y >= self.height:
-			return
+			return todo
 		if (x, y, direction) in self.light:
-			return
+			return todo
 		self.light.add((x, y, direction))
 		if self.lines[y][x] == ".":
 			next_dirs = [direction]
@@ -54,7 +55,7 @@ class Map:
 			next_x = x + vector[0]
 			next_y = y + vector[1]
 			todo.add((next_x, next_y, d))
-		return
+		return todo
 
 	def reset(self):
 		self.light = set()
@@ -77,7 +78,7 @@ def work(m, x, y, direction):
 	todo.add((x, y, direction))
 	while len(todo) > 0:
 		x, y, direction = todo.pop()
-		m.propagate(x, y, direction, todo)
+		todo |= m.propagate(x, y, direction)
 	return m.count_energy()
 
 def main():
