@@ -34,16 +34,10 @@ VECTORS = {
 
 class Map:
 	def __init__(self, lines):
+		self.lines = lines				# Remember to use [y][x] when accessing
 		self.width = len(lines[0])
 		self.height = len(lines)
-		self.map = []
 		self.light = set()
-		for x in range(self.width):
-			self.map.append([])
-		for y in range(self.height):
-			for x in range(self.width):
-				c = lines[y][x]
-				self.map[x].append(c)
 
 	def propagate(self, x, y, direction, todo):
 		if x < 0 or x >= self.width or y < 0 or y >= self.height:
@@ -51,10 +45,10 @@ class Map:
 		if (x, y, direction) in self.light:
 			return
 		self.light.add((x, y, direction))
-		if self.map[x][y] == ".":
+		if self.lines[y][x] == ".":
 			next_dirs = [direction]
 		else:
-			next_dirs = RULES[direction][self.map[x][y]]
+			next_dirs = RULES[direction][self.lines[y][x]]
 		for d in next_dirs:
 			vector = VECTORS[d]
 			next_x = x + vector[0]
