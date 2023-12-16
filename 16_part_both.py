@@ -37,22 +37,20 @@ class Map:
 		self.width = len(lines[0])
 		self.height = len(lines)
 		self.map = []
-		self.light = []
+		self.light = set()
 		for x in range(self.width):
 			self.map.append([])
-			self.light.append([])
 		for y in range(self.height):
 			for x in range(self.width):
 				c = lines[y][x]
 				self.map[x].append(c)
-				self.light[x].append(set())
 
 	def propagate(self, x, y, direction, todo):
 		if x < 0 or x >= self.width or y < 0 or y >= self.height:
 			return
-		if direction in self.light[x][y]:
+		if (x, y, direction) in self.light:
 			return
-		self.light[x][y].add(direction)
+		self.light.add((x, y, direction))
 		if self.map[x][y] == ".":
 			next_dirs = [direction]
 		else:
@@ -65,17 +63,13 @@ class Map:
 		return
 
 	def reset(self):
-		for x in range(self.width):
-			for y in range(self.height):
-				self.light[x][y] = set()
+		self.light = set()
 
 	def count_energy(self):
-		ret = 0
-		for x in range(self.width):
-			for y in range(self.height):
-				if len(self.light[x][y]) > 0:
-					ret += 1
-		return ret
+		energised = set()
+		for x, y, _ in self.light:
+			energised.add((x, y))
+		return len(energised)
 
 
 def parse(filename):
