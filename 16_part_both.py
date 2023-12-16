@@ -61,10 +61,7 @@ class Map:
 		self.light = set()
 
 	def count_energy(self):
-		energised = set()
-		for x, y, _ in self.light:
-			energised.add((x, y))
-		return len(energised)
+		return len({(x, y) for x, y, d in self.light})		# Merge hits with differing directions
 
 
 def parse(filename):
