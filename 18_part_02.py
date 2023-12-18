@@ -81,7 +81,7 @@ def main():
 	vals = parse("18_input.txt")
 	vedges = get_vertical_edges(vals)
 
-	significant_y_vals = set()
+	significant_y_vals = set()		# Any y where an edge starts or ends.
 	for edge in vedges:
 		significant_y_vals.add(edge.y1)
 		significant_y_vals.add(edge.y2)
@@ -94,8 +94,13 @@ def main():
 		y1 = significant_y_vals[i]
 		y2 = significant_y_vals[i + 1]
 
+		# Find the x of all lines that fully include (y1,y2)...
+
 		x_vals = [edge.x1 for edge in vedges if edge.y1 <= y1 and edge.y2 >= y2]
 		x_vals.sort()
+
+		# Construct the rects that are inside the loop...
+
 		top_edges = [Edge(x_vals[i], y1, x_vals[i + 1], y1) for i in range(0, len(x_vals), 2)]
 
 		for top in top_edges:
