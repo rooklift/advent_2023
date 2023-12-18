@@ -1,3 +1,5 @@
+import itertools
+
 VECTORS = {
 	"U": (0, -1),
 	"D": (0, 1),
@@ -110,14 +112,12 @@ def main():
 
 	excess = 0
 	overlap_count = 0
-	for i in range(len(rects) - 1):
-		rect1 = rects[i]
-		for j in range(i + 1, len(rects)):
-			rect2 = rects[j]
-			ov = rect1.overlap(rect2)
-			if ov > 0:
-				excess += ov
-				overlap_count += 1
+
+	for combo in itertools.combinations(rects, 2):		# Test every possible pair of rects
+		ov = combo[0].overlap(combo[1])
+		if ov > 0:
+			excess += ov
+			overlap_count += 1
 
 	print("   rects:", len(rects))
 	print("overlaps:", overlap_count)
