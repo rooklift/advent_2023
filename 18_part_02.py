@@ -117,8 +117,8 @@ def main():
 	excess = 0
 	overlap_count = 0
 
-	# Test every possible pair of rects. Really we should just test each row of rects created
-	# against the next row of rects created...
+	# Test every possible pair of rects. Really we should just test each row of rects created against
+	# the next row of rects created... or sort the rects and only test against nearby rects...
 
 	for combo in itertools.combinations(rects, 2):
 		ov = combo[0].overlap(combo[1])
