@@ -1,3 +1,7 @@
+# Pretty pleased with this one, I got it all by myself while other people
+# were looking up the Shoelace Formula and Pick's Theorem and such.
+# My approach is quite different.
+
 import itertools
 
 VECTORS = {
