@@ -44,9 +44,7 @@ def main():
 	wd = dict()
 	for workflow in workflows:
 		wd[workflow.name] = workflow
-
 	result = 0
-
 	for part in parts:
 		dest = "in"
 		while dest not in ["A", "R"]:
@@ -54,7 +52,6 @@ def main():
 			dest = workflow.process(part)
 		if dest == "A":
 			result += part["x"] + part["m"] + part["a"] + part["s"]
-
 	print(result)
 
 main()
