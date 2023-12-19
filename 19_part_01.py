@@ -9,8 +9,15 @@ def parse(filename):
 	for line in a_lines:
 		workflows.append(Workflow(line))
 	for line in b_lines:
-		parts.append(Part(line))
+		parts.append(make_part(line))
 	return workflows, parts
+
+def make_part(line):
+	ret = dict()
+	for item in line[1:-1].split(","):
+		key, val = item.split("=")
+		ret[key] = int(val)
+	return ret
 
 class Workflow:
 
@@ -30,21 +37,6 @@ class Workflow:
 				return dest
 			elif test[1] == ">" and part[key] > val:
 				return dest
-
-class Part:
-
-	def __init__(self, line):
-		self._d = dict()
-		foo = line[1:-1].split(",")
-		for item in foo:
-			key, val = item.split("=")
-			self[key] = int(val)
-
-	def __getitem__(self, key):
-		return self._d[key]
-
-	def __setitem__(self, key, val):
-		self._d[key] = val
 
 def main():
 
