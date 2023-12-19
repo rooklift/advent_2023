@@ -20,12 +20,10 @@ def make_part(line):
 	return ret
 
 class Workflow:
-
 	def __init__(self, line):
 		line = line[:-1]
 		self.name, instructions = line.split("{")
 		self.instructions = instructions.split(",")
-
 	def process(self, part):
 		for ins in self.instructions:
 			if ":" not in ins:
@@ -39,7 +37,6 @@ class Workflow:
 				return dest
 
 def main():
-
 	workflows, parts = parse("19_input.txt")
 	wd = dict()
 	for workflow in workflows:
