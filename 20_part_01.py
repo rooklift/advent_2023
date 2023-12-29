@@ -13,7 +13,7 @@ def parse(filename):
 	for node in nodes:
 		d[node.name] = node
 
-	# Replace the output names with refs to the actual objects:
+	# Populate the node outputs with actual objects:
 
 	for node in nodes:
 		for s in node.output_strings:
@@ -22,7 +22,7 @@ def parse(filename):
 				print("Added " + s)
 			node.outputs.append(d[s])
 
-	# Add the inputs:
+	# Populate the node outputs with actual objects:
 
 	for node in nodes:
 		for output in node.outputs:
