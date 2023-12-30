@@ -7,19 +7,13 @@ def main():
 	lines = parse("21_input.txt")
 
 	empty = set()		# Spaces we can go to.
-	blocked = set()		# Walls. This is not really used.
 
-	results = []
-
-	for n in range(65):
-		results.append(set())
+	results = [set() for n in range(65)]
 
 	for y in range(len(lines)):
 		for x in range(len(lines[0])):
 			if lines[y][x] == ".":
 				empty.add((x, y))
-			elif lines[y][x] == "#":
-				blocked.add((x, y))
 			elif lines[y][x] == "S":
 				results[0].add((x, y))
 
