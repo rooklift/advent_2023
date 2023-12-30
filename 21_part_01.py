@@ -23,25 +23,12 @@ def main():
 			elif lines[y][x] == "S":
 				results[0].add((x, y))
 
-	for n in range(64):		# Not 65
-
+	for n in range(64):				# Not 65
 		for x, y in results[n]:
-
-			if (x - 1, y) in empty:
-				results[n + 1].add((x - 1, y))
-				empty.discard((x - 1, y))
-
-			if (x + 1, y) in empty:
-				results[n + 1].add((x + 1, y))
-				empty.discard((x + 1, y))
-
-			if (x, y - 1) in empty:
-				results[n + 1].add((x, y - 1))
-				empty.discard((x, y - 1))
-
-			if (x, y + 1) in empty:
-				results[n + 1].add((x, y + 1))
-				empty.discard((x, y + 1))
+			for i, j in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
+				if (x + i, y + j) in empty:
+					results[n + 1].add((x + i, y + j))
+					empty.discard((x + i, y + j))
 
 	total = 0
 
