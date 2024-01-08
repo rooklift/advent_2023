@@ -1,20 +1,15 @@
 def parse(filename):
 	with open(filename) as f:
 		lines = [line.strip() for line in f.read().split("\n") if line.strip() != ""]
-	ret = dict()
+	ret = []
 	for line in lines:
 		params = [int(s) for s in line.replace("~", ",").split(",")]
-		shape = Shape(*params)
-		ret[shape.id] = shape
+		ret.append(Shape(*params))
 	return ret
 
 class Shape:
 
-	next_id = 0
-
 	def __init__(self, x1, y1, z1, x2, y2, z2):		# We can assume x1 <= x2 etc...
-		self.id = Shape.next_id
-		Shape.next_id += 1
 		self.blocks = []
 		if x1 != x2:
 			for x in range(x1, x2 + 1):
@@ -55,9 +50,9 @@ class Shape:
 				ret.append((block[0], block[1], block[2] + 1))
 			return ret
 
-	def has_supporters(self, block_id_dict):
+	def has_supporters(self, block_dict):
 		for spot in self.spots_below():
-			if spot in block_id_dict:
+			if spot in block_dict:
 				return True
 		return False
 
@@ -67,57 +62,51 @@ class Shape:
 
 	def add_to_dict(self, d):
 		for block in self.blocks:
-			d[block] = self.id
+			d[block] = self
 
-	def drop(self, block_id_dict):
-		self.remove_from_dict(block_id_dict)
+	def drop(self, block_dict):
+		self.remove_from_dict(block_dict)
 		self.blocks = [(o[0], o[1], o[2] - 1) for o in self.blocks]
-		self.add_to_dict(block_id_dict)
+		self.add_to_dict(block_dict)
 
-	def has_exactly_one_supporter(self, block_id_dict):
-		supporter_ids = set()
+	def has_exactly_one_supporter(self, block_dict):
+		supporters = set()
 		for spot in self.spots_below():
-			if spot in block_id_dict:
-				supporter_ids.add(block_id_dict[spot])
-		return len(supporter_ids) == 1
+			if spot in block_dict:
+				supporters.add(block_dict[spot])
+		return len(supporters) == 1
 
-	def is_necessary(self, id_shape_dict, block_id_dict):
-
-		# Shape is necessary if:
-		# 		It supports any shape
-		#		No other shape supports that shape
-
+	def is_necessary(self, block_dict):		# Shape is necessary if it is the ONLY supporter of any shape
 		supported_shapes = set()
 		for block in self.spots_above():
-			if block in block_id_dict:
-				supported_shapes.add(id_shape_dict[block_id_dict[block]])
+			if block in block_dict:
+				supported_shapes.add(block_dict[block])
 		for shape in supported_shapes:
-			if shape.has_exactly_one_supporter(block_id_dict):
+			if shape.has_exactly_one_supporter(block_dict):
 				return True
 		return False
 
 def main():
 
-	id_shape_dict = parse("22_input.txt")		# id --> shape
-	block_id_dict = dict()						# (x,y,z) --> id
+	shapes = parse("22_input.txt")				# Array of shapes
+	block_dict = dict()							# (x,y,z) --> shape
 
-	for shape in id_shape_dict.values():
-		for block in shape.blocks:
-			block_id_dict[block] = shape.id
+	for shape in shapes:
+		shape.add_to_dict(block_dict)
 
 	while True:
 		did_work = False
-		for shape in id_shape_dict.values():
-			while not (shape.has_supporters(block_id_dict) or shape.min_z() == 1):
-				shape.drop(block_id_dict)
+		for shape in shapes:
+			while not (shape.has_supporters(block_dict) or shape.min_z() == 1):
+				shape.drop(block_dict)
 				did_work = True
 		if not did_work:
 			break
 
 	total_removable = 0
 
-	for sid, shape in id_shape_dict.items():
-		needed = shape.is_necessary(id_shape_dict, block_id_dict)
+	for shape in shapes:
+		needed = shape.is_necessary(block_dict)
 		if not needed:
 			total_removable += 1
 
