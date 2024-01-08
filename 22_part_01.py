@@ -84,30 +84,16 @@ class Shape:
 	def is_necessary(self, id_shape_dict, block_id_dict):
 
 		# Shape is necessary if:
-		# 	It supports any shape
-		#	No other shape supports that shape
+		# 		It supports any shape
+		#		No other shape supports that shape
 
 		supported_shapes = set()
-
-		# If vertical shape...
-
-		if self.blocks[0][2] != self.blocks[-1][2]:
-
-			test = (self.blocks[0][0], self.blocks[0][1], self.max_z() + 1)
-			if test in block_id_dict:
-				supported_shapes.add(id_shape_dict[block_id_dict[test]])
-
-		else:		# Otherwise, this is a horizontal shape...
-
-			for block in self.blocks:
-				test = (block[0], block[1], block[2] + 1)
-				if test in block_id_dict:
-					supported_shapes.add(id_shape_dict[block_id_dict[test]])
-
+		for block in self.spots_above():
+			if block in block_id_dict:
+				supported_shapes.add(id_shape_dict[block_id_dict[block]])
 		for shape in supported_shapes:
 			if shape.has_exactly_one_supporter(block_id_dict):
 				return True
-
 		return False
 
 def main():
