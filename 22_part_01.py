@@ -87,13 +87,10 @@ class Shape:
 		return False
 
 def main():
-
 	shapes = parse("22_input.txt")				# Array of shapes
 	block_dict = dict()							# (x,y,z) --> shape
-
 	for shape in shapes:
 		shape.add_to_dict(block_dict)
-
 	while True:
 		did_work = False
 		for shape in shapes:
@@ -102,14 +99,11 @@ def main():
 				did_work = True
 		if not did_work:
 			break
-
 	total_removable = 0
-
 	for shape in shapes:
 		needed = shape.is_necessary(block_dict)
 		if not needed:
 			total_removable += 1
-
 	print(total_removable)
 
 
