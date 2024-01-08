@@ -56,18 +56,18 @@ class Shape:
 				return True
 		return False
 
-	def remove_from_dict(self, d):
+	def remove_blocks(self, d):
 		for block in self.blocks:
 			del d[block]
 
-	def add_to_dict(self, d):
+	def add_blocks(self, d):
 		for block in self.blocks:
 			d[block] = self
 
 	def drop(self, block_dict):
-		self.remove_from_dict(block_dict)
+		self.remove_blocks(block_dict)
 		self.blocks = [(o[0], o[1], o[2] - 1) for o in self.blocks]
-		self.add_to_dict(block_dict)
+		self.add_blocks(block_dict)
 
 	def has_exactly_one_supporter(self, block_dict):
 		supporters = set()
@@ -90,7 +90,7 @@ def main():
 	shapes = parse("22_input.txt")				# Array of shapes
 	block_dict = dict()							# (x,y,z) --> shape
 	for shape in shapes:
-		shape.add_to_dict(block_dict)
+		shape.add_blocks(block_dict)
 	while True:
 		did_work = False
 		for shape in shapes:

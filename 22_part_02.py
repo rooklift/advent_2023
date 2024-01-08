@@ -1,20 +1,15 @@
 def parse(filename):
 	with open(filename) as f:
 		lines = [line.strip() for line in f.read().split("\n") if line.strip() != ""]
-	ret = dict()
+	ret = []
 	for line in lines:
 		params = [int(s) for s in line.replace("~", ",").split(",")]
-		shape = Shape(*params)
-		ret[shape.id] = shape
+		ret.append(Shape(*params))
 	return ret
 
 class Shape:
 
-	next_id = 0
-
 	def __init__(self, x1, y1, z1, x2, y2, z2):		# We can assume x1 <= x2 etc...
-		self.id = Shape.next_id
-		Shape.next_id += 1
 		self.blocks = []
 		if x1 != x2:
 			for x in range(x1, x2 + 1):
@@ -43,58 +38,56 @@ class Shape:
 				ret.append((block[0], block[1], block[2] - 1))
 			return ret
 
-	def has_supporters(self, block_id_dict):
+	def has_supporters(self, block_dict):
 		for spot in self.spots_below():
-			if spot in block_id_dict:
+			if spot in block_dict:
 				return True
 		return False
 
-	def remove_from_dict(self, d):
+	def remove_blocks(self, d):
 		for block in self.blocks:
 			del d[block]
 
-	def add_to_dict(self, d):
+	def add_blocks(self, d):
 		for block in self.blocks:
-			d[block] = self.id
+			d[block] = self
 
-	def drop(self, block_id_dict):
-		self.remove_from_dict(block_id_dict)
+	def drop(self, block_dict):
+		self.remove_blocks(block_dict)
 		self.blocks = [(o[0], o[1], o[2] - 1) for o in self.blocks]
-		self.add_to_dict(block_id_dict)
-
-	def hide(self, id_shape_dict, block_id_dict):
-		self.remove_from_dict(block_id_dict)
-		del id_shape_dict[self.id]
+		self.add_blocks(block_dict)
 
 def main():
-	id_shape_dict = parse("22_input.txt")		# id --> shape
-	block_id_dict = dict()						# (x,y,z) --> id
-	for shape in id_shape_dict.values():
-		for block in shape.blocks:
-			block_id_dict[block] = shape.id
+	shapes = parse("22_input.txt")				# Array of shapes
+	block_dict = dict()							# (x,y,z) --> shape
+	for shape in shapes:
+		shape.add_blocks(block_dict)
 	while True:
 		did_work = False
-		for shape in id_shape_dict.values():
-			while not (shape.has_supporters(block_id_dict) or shape.min_z() == 1):
-				shape.drop(block_id_dict)
+		for shape in shapes:
+			while not (shape.has_supporters(block_dict) or shape.min_z() == 1):
+				shape.drop(block_dict)
 				did_work = True
 		if not did_work:
 			break
 	total = 0
-	for shape in id_shape_dict.values():
-		total += count_dependencies(shape, id_shape_dict, block_id_dict)
+	for shape in shapes:
+		total += count_dependencies(shape, shapes, block_dict)
 	print(total)
 
-def count_dependencies(shape, id_shape_dict, block_id_dict):
-	id_shape_dict = id_shape_dict.copy()
-	block_id_dict = block_id_dict.copy()
-	shape.hide(id_shape_dict, block_id_dict)
+
+def count_dependencies(shape, all_shapes, block_dict):
+	alive_shapes = set(all_shapes)
+	block_dict = block_dict.copy()
+	shape.remove_blocks(block_dict)
+	alive_shapes.discard(shape)
 	ret = 0
 	while True:
 		did_work = False
-		for shape in list(id_shape_dict.values()):
-			if not (shape.has_supporters(block_id_dict) or shape.min_z() == 1):
-				shape.hide(id_shape_dict, block_id_dict)
+		for o in list(alive_shapes):
+			if not (o.has_supporters(block_dict) or o.min_z() == 1):
+				o.remove_blocks(block_dict)
+				alive_shapes.discard(o)
 				ret += 1
 				did_work = True
 		if not did_work:
