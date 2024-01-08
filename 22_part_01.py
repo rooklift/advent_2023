@@ -117,14 +117,6 @@ class Shape:
 
 		return False
 
-
-
-
-
-
-
-
-
 def main():
 
 	shapes = parse("22_input.txt")		# id --> shape
