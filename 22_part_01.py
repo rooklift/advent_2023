@@ -34,22 +34,30 @@ class Shape:
 	def max_z(self):
 		return max([o[2] for o in self.blocks])
 
-	def has_supporters(self, occupied_spots):
+	def is_vertical(self):
+		return self.blocks[0][2] != self.blocks[-1][2]
 
-		# If vertical shape...
+	def spots_below(self):
+		if self.is_vertical():
+			return [(self.blocks[0][0], self.blocks[0][1], self.min_z() - 1)]
+		else:
+			ret = []
+			for block in self.blocks:
+				ret.append((block[0], block[1], block[2] - 1))
+			return ret
 
-		if self.blocks[0][2] != self.blocks[-1][2]:
-			test = (self.blocks[0][0], self.blocks[0][1], self.min_z() - 1)
-			if test in occupied_spots:
-				return True
-			else:
-				return False
+	def spots_above(self):
+		if self.is_vertical():
+			return [(self.blocks[0][0], self.blocks[0][1], self.max_z() + 1)]
+		else:
+			ret = []
+			for block in self.blocks:
+				ret.append((block[0], block[1], block[2] + 1))
+			return ret
 
-		# Otherwise, this is a horizontal shape...
-
-		for block in self.blocks:
-			test = (block[0], block[1], block[2] - 1)
-			if test in occupied_spots:
+	def has_supporters(self, block_id_dict):
+		for spot in self.spots_below():
+			if spot in block_id_dict:
 				return True
 		return False
 
@@ -61,34 +69,19 @@ class Shape:
 		for block in self.blocks:
 			d[block] = self.id
 
-	def drop(self, occupied_spots):
-		self.remove_from_dict(occupied_spots)
+	def drop(self, block_id_dict):
+		self.remove_from_dict(block_id_dict)
 		self.blocks = [(o[0], o[1], o[2] - 1) for o in self.blocks]
-		self.add_to_dict(occupied_spots)
+		self.add_to_dict(block_id_dict)
 
-	def has_exactly_one_supporter(self, occupied_spots):
-
-		# If vertical shape...
-
-		if self.blocks[0][2] != self.blocks[-1][2]:
-			test = (self.blocks[0][0], self.blocks[0][1], self.min_z() - 1)
-			if test in occupied_spots:
-				return True
-			else:
-				return False
-
-		# Otherwise, this is a horizontal shape...
-
+	def has_exactly_one_supporter(self, block_id_dict):
 		supporter_ids = set()
-
-		for block in self.blocks:
-			test = (block[0], block[1], block[2] - 1)
-			if test in occupied_spots:
-				supporter_ids.add(occupied_spots[test])
-
+		for spot in self.spots_below():
+			if spot in block_id_dict:
+				supporter_ids.add(block_id_dict[spot])
 		return len(supporter_ids) == 1
 
-	def is_necessary(self, shapes, occupied_spots):
+	def is_necessary(self, id_shape_dict, block_id_dict):
 
 		# Shape is necessary if:
 		# 	It supports any shape
@@ -101,44 +94,44 @@ class Shape:
 		if self.blocks[0][2] != self.blocks[-1][2]:
 
 			test = (self.blocks[0][0], self.blocks[0][1], self.max_z() + 1)
-			if test in occupied_spots:
-				supported_shapes.add(shapes[occupied_spots[test]])
+			if test in block_id_dict:
+				supported_shapes.add(id_shape_dict[block_id_dict[test]])
 
 		else:		# Otherwise, this is a horizontal shape...
 
 			for block in self.blocks:
 				test = (block[0], block[1], block[2] + 1)
-				if test in occupied_spots:
-					supported_shapes.add(shapes[occupied_spots[test]])
+				if test in block_id_dict:
+					supported_shapes.add(id_shape_dict[block_id_dict[test]])
 
 		for shape in supported_shapes:
-			if shape.has_exactly_one_supporter(occupied_spots):
+			if shape.has_exactly_one_supporter(block_id_dict):
 				return True
 
 		return False
 
 def main():
 
-	shapes = parse("22_input.txt")		# id --> shape
+	id_shape_dict = parse("22_input.txt")		# id --> shape
+	block_id_dict = dict()						# (x,y,z) --> id
 
-	occupied_spots = dict()				# (x,y,z) --> id
-	for shape in shapes.values():
+	for shape in id_shape_dict.values():
 		for block in shape.blocks:
-			occupied_spots[block] = shape.id
+			block_id_dict[block] = shape.id
 
 	while True:
 		did_work = False
-		for shape in shapes.values():
-			while not (shape.has_supporters(occupied_spots) or shape.min_z() == 1):
-				shape.drop(occupied_spots)
+		for shape in id_shape_dict.values():
+			while not (shape.has_supporters(block_id_dict) or shape.min_z() == 1):
+				shape.drop(block_id_dict)
 				did_work = True
 		if not did_work:
 			break
 
 	total_removable = 0
 
-	for sid, shape in shapes.items():
-		needed = shape.is_necessary(shapes, occupied_spots)
+	for sid, shape in id_shape_dict.items():
+		needed = shape.is_necessary(id_shape_dict, block_id_dict)
 		if not needed:
 			total_removable += 1
 
@@ -146,5 +139,3 @@ def main():
 
 
 main()
-
-
