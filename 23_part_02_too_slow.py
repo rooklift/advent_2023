@@ -1,16 +1,9 @@
-N = 1
-E = 2
-S = 3
-W = 4
-
-all_dirs = [N, E, S, W]
-
-vectors = {
-	N: [0, -1],
-	E: [1, 0],
-	S: [0, 1],
-	W: [-1, 0]
-}
+vectors = [
+	(0, -1),
+	(1, 0),
+	(0, 1),
+	(-1, 0)
+]
 
 def make_2d_array(width, height):
 	ret = []
@@ -51,9 +44,7 @@ def longest(world, x, y, steps, been):
 
 		valid_next_locs = []
 
-		for pnd in all_dirs:
-
-			vector = vectors[pnd]
+		for vector in vectors:
 
 			px = x + vector[0]
 			py = y + vector[1]
@@ -65,21 +56,18 @@ def longest(world, x, y, steps, been):
 
 			if c == ".":
 				valid_next_locs.append((px, py))
-
-			if c == "F":
+			elif c == "F":
 				print(steps + 1)
 				return steps + 1
 
 		if len(valid_next_locs) == 0:
 			# print("Dead end: {} steps, x,y = {},{}".format(steps, x, y))
 			return None
-
 		elif len(valid_next_locs) == 1:
 			steps += 1
 			x = valid_next_locs[0][0]
 			y = valid_next_locs[0][1]
 			continue
-
 		else:
 			best = None
 			for loc in valid_next_locs:
