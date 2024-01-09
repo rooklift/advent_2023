@@ -1,7 +1,7 @@
 vectors = [
 	(0, -1),
-	(1, 0),
 	(0, 1),
+	(1, 0),
 	(-1, 0)
 ]
 
@@ -16,8 +16,6 @@ def make_2d_array(width, height):
 def parse(filename):
 	with open(filename) as f:
 		s = f.read()
-	s = s.replace("v", ".")
-	s = s.replace(">", ".")
 	lines = [line.strip() for line in s.split("\n") if line.strip() != ""]
 	width = len(lines[0])
 	height = len(lines)
@@ -28,13 +26,19 @@ def parse(filename):
 	world[-2][-1] = "F"
 	return world
 
+result = 0
+
 def main():
-	world = parse("23_example.txt")
+	global result
+	world = parse("23_input.txt")
 	been = set()
 	been.add((1, 0))
-	print("\nBest:", longest(world, 1, 1, 1, been))		# Cheap hack - start after 1 step made, at [1,1]
+	search(world, 1, 1, 1, been)		# Cheap hack - start after 1 step made, at [1,1]
+	print("Result:", result)
 
-def longest(world, x, y, steps, been):
+def search(world, x, y, steps, been):
+
+	global result
 
 	been = been.copy()
 
@@ -54,26 +58,30 @@ def longest(world, x, y, steps, been):
 
 			c = world[px][py]
 
-			if c == ".":
+			if c == "." or c == ">" or c == "v":
 				valid_next_locs.append((px, py))
 			elif c == "F":
-				print(steps + 1)
-				return steps + 1
+				print(steps + 1, result)
+				if steps + 1 > result:
+					result = steps + 1
+				return
 
 		if len(valid_next_locs) == 0:
-			return None
+			return
 		elif len(valid_next_locs) == 1:
 			steps += 1
 			x = valid_next_locs[0][0]
 			y = valid_next_locs[0][1]
 			continue
+		elif x == 131 and y == 125:		# Stupid optimisation
+			steps += 1
+			x = 131
+			y = 126
+			continue
 		else:
-			best = None
 			for loc in valid_next_locs:
-				dist = longest(world, loc[0], loc[1], steps + 1, been)
-				if dist != None and (best == None or dist > best):
-					best = dist
-			return best
+				search(world, loc[0], loc[1], steps + 1, been)
+			return
 
 
 main()
