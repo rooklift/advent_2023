@@ -72,7 +72,7 @@ def longest(world, x, y, direction, steps):
 				valid_next_locs.append((px, py))
 				valid_next_dirs.append(pnd)
 
-		if len(valid_next_locs) == 0:		# We reached F
+		if len(valid_next_locs) == 0:		# F is one step ahead of us
 			return steps + 1
 		elif len(valid_next_locs) == 1:
 			steps += 1
