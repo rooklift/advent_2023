@@ -32,7 +32,7 @@ def main():
 	world = parse("23_example.txt")
 	been = set()
 	been.add((1, 0))
-	print("Result:", longest(world, 1, 1, 1, been))		# Cheap hack - start after 1 step made, at [1,1]
+	print("\nBest:", longest(world, 1, 1, 1, been))		# Cheap hack - start after 1 step made, at [1,1]
 
 def longest(world, x, y, steps, been):
 
@@ -61,7 +61,6 @@ def longest(world, x, y, steps, been):
 				return steps + 1
 
 		if len(valid_next_locs) == 0:
-			# print("Dead end: {} steps, x,y = {},{}".format(steps, x, y))
 			return None
 		elif len(valid_next_locs) == 1:
 			steps += 1
