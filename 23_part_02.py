@@ -77,23 +77,16 @@ def is_node(world, x, y):
 		return True
 	return False
 
-def get_connection(world, nodes, x, y, dist, been):
-
-	# Initial call should be one step away from the node, with been set for it and dist == 1
-
+def get_connection(world, nodes, x, y, dist, been):		# Initial call should be one step away from node, with been set for it and dist = 1
 	while True:
-
 		been.add((x, y))
-
 		if is_node(world, x, y):
 			for node in nodes:
 				if node.x == x and node.y == y:
 					return Connection(dist, node)
 			assert(False)
-
 		neighs = neighbours(world, x, y)
 		assert(len(neighs) == 2)
-
 		for neighbour in neighs:
 			if neighbour in been:
 				continue
@@ -101,60 +94,39 @@ def get_connection(world, nodes, x, y, dist, been):
 			dist += 1
 
 def main():
-
 	world = parse("23_input.txt")
-
 	width = len(world)
 	height = len(world[0])
-
 	nodes = []
-
 	for x in range(width):
 		for y in range(height):
 			if is_node(world, x, y):
 				nodes.append(Node(x, y))
-
 	for node in nodes:
 		node.fill_connections(world, nodes)
 		node.set_start_finish(world)
-
-	search(nodes, width, height)
+	print(search(nodes, width, height))
 
 def search(nodes, width, height):
-
 	for node in nodes:
 		if node.start:
-			start = node
-			break
-
-	search_recurse(start, 0, set())
-
-
-best = 0
-
+			return search_recurse(node, 0, set())
 
 def search_recurse(node, dist, been):
-
-	global best
-
 	been = been.copy()
 	been.add(node)
-
+	results = []
 	for connection in node.connections:
-
 		if connection.target in been:
 			continue
-
-		elif connection.target.finish:
-			dist += connection.dist
-			if dist > best:
-				best = dist
-			print(dist, best)
-			continue
-
+		elif connection.target.finish:			# We are the penultimate node so we must take the route to the finish
+			return dist + connection.dist
 		else:
-			search_recurse(connection.target, dist + connection.dist, been)
+			results.append(search_recurse(connection.target, dist + connection.dist, been))
+	if len(results) == 0:
+		return -1
+	else:
+		return max(results)
 
 
 main()
-
