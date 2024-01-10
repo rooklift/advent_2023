@@ -1,6 +1,6 @@
 vectors = [
-	(0, -1),
 	(0, 1),
+	(0, -1),
 	(1, 0),
 	(-1, 0)
 ]
@@ -116,10 +116,11 @@ def search_recurse(node, dist, been):
 	been.add(node)
 	results = []
 	for connection in node.connections:
+		if connection.target.finish:			# We are the penultimate node so we must take the route to the finish, any other route fails.
+			return dist + connection.dist
+	for connection in node.connections:
 		if connection.target in been:
 			continue
-		elif connection.target.finish:			# We are the penultimate node so we must take the route to the finish
-			return dist + connection.dist
 		else:
 			results.append(search_recurse(connection.target, dist + connection.dist, been))
 	if len(results) == 0:
