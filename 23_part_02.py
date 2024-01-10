@@ -32,9 +32,6 @@ class Connection:
 		self.dist = dist
 		self.target = target
 
-	def __repr__(self):
-		return "{} --> {},{}".format(self.dist, self.target.x, self.target.y)
-
 class Node:
 	def __init__(self, x, y):
 		self.x = x
@@ -50,9 +47,11 @@ class Node:
 			self.connections.append(get_connection(world, nodes, neighbour[0], neighbour[1], 1, been))
 
 	def set_start_finish(self, world):
+		width = len(world)
+		height = len(world[0])
 		if self.x == 1 and self.y == 0:
 			self.start = True
-		if self.x == len(world) - 2 and self.y == len(world[0]) - 1:
+		if self.x == width - 2 and self.y == height - 1:
 			self.finish = True
 
 def neighbours(world, x, y):			# Only neighbours that are traversable i.e. "."
