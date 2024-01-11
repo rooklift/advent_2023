@@ -119,9 +119,7 @@ def search_recurse(node, dist, been):
 		if connection.target.finish:			# We are the penultimate node so we must take the route to the finish, any other route fails.
 			return dist + connection.dist
 	for connection in node.connections:
-		if connection.target in been:
-			continue
-		else:
+		if connection.target not in been:
 			results.append(search_recurse(connection.target, dist + connection.dist, been))
 	if len(results) == 0:
 		return -1
