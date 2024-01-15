@@ -68,7 +68,7 @@ def neighbours(world, x, y):			# Only neighbours that are traversable i.e. "."
 def is_node(world, x, y):
 	if x == 1 and y == 0:
 		return True
-	if x == len(world) - 2 and y == len(world) - 1:
+	if x == len(world) - 2 and y == len(world[0]) - 1:
 		return True
 	if world[x][y] != ".":
 		return False
